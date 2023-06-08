@@ -20,7 +20,8 @@ namespace GSC_Engine
         public static void PromptToChoose(GSC_Message<Guid[]> choose)
         {
             if (choose.Arg1.IsNullOrEmpty()) return;
-
+           
+           
             while (true)
             {
                 Console.Clear();
@@ -48,9 +49,7 @@ namespace GSC_Engine
                 script = Console.ReadLine();
                 Console.WriteLine("The result of the script line was:");
                 List<GSC_ScriptToken> tokens = GSC_LexicalParser.Parse(script);
-
-                foreach (GSC_ScriptToken token in tokens) Console.Write($"{token.TokenType} ");
-                Console.WriteLine();
+               
                 List<GSC_Message> message = GSC_Lexicon.Parse(tokens);
                 if (message.IsNullOrEmpty()) Console.WriteLine("No message processed");
                 else

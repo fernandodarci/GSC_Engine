@@ -72,9 +72,25 @@ namespace GSC_Engine
                 {
                     if (OpenBracket == false)
                     {
-                        if (part.StartsWith("@") && !part.EndsWith(";"))
+                        if (part.EndsWith(";"))
+                        {
+                            string endPart = part.TrimEnd(';');
+                            if (endPart.StartsWith("@")) tokens.Add(Keyword(endPart));
+                            else if (endPart.StartsWith("$")) tokens.Add(Handler(endPart));
+                            else if (IsValidString(endPart)) tokens.Add(String(endPart));
+                            else if (int.TryParse(endPart, out _)) tokens.Add(Integer(endPart));
+                            else tokens.Add(Undefined(endPart));
+
+                            tokens.Add(End());
+                            return tokens;
+                        }
+                        else if (part.StartsWith("@"))
                         {
                             tokens.Add(IsValidString(part.Substring(1)) ? Keyword(part) : Undefined(part));
+                        }
+                        else if(part.StartsWith("$"))
+                        {
+                            tokens.Add(IsValidString(part.Substring(1)) ? Handler(part) : Undefined(part));
                         }
                         else if (part.StartsWith("["))
                         {
@@ -109,18 +125,6 @@ namespace GSC_Engine
                                 tokens.Add(End());
                                 return tokens;
                             }
-                        }
-                        else if (part.EndsWith(";"))
-                        {
-                            string endPart = part.TrimEnd(';');
-                            if (endPart.StartsWith("@")) tokens.Add(Keyword(endPart));
-                            else if (endPart.StartsWith("$")) tokens.Add(Handler(endPart));
-                            else if (IsValidString(endPart)) tokens.Add(String(endPart));
-                            else if (int.TryParse(endPart, out _)) tokens.Add(Integer(endPart));
-                            else tokens.Add(Undefined(endPart));
-                            
-                            tokens.Add(End());
-                            return tokens;
                         }
                         else if (IsValidString(part)) tokens.Add(String(part));
                         else if (int.TryParse(part, out _)) tokens.Add(Integer(part));

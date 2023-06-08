@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace GSC_Engine
 {
@@ -24,6 +24,18 @@ namespace GSC_Engine
                 }
             }
         }
+
+        public static int FindPatternIndex<T>(this T[][] array, T[] pattern)
+        {
+            return Array.FindIndex(array, subArray => subArray.SequenceEqual(pattern));
+        }
+
+        public static string ConcatenateStrings(this string string1, string string2)
+        {
+            if (string2.StartsWith("$")) string2 = string2.Substring(1); 
+            return string1 + "_" + string2;
+        }
+
     }
- 
+
 }
